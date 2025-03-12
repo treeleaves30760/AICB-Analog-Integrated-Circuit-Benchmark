@@ -85,3 +85,18 @@ If you use AICB in your research, please cite:
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Appendix
+
+Domain set:
+
+- Amplifier Design
+- Layout and Fabrication
+- MOS Device Physics & Modeling
+- Frequency-Dependent Circuits
+- Fundamental Circuit Concepts
+- Noise and Distortion
+- Feedback and Stability
+- Advanced Analog Circuits
+- Reference Circuits
+- Data Conversion
