@@ -37,17 +37,117 @@ The benchmark covers several key domains in analog IC design:
 - Power Management Circuits
 - Process, Voltage, and Temperature (PVT) Considerations
 
-### Example
+## Usage
 
-Check `example.py` for a complete example of how to use the benchmark with a specific LLM.
+### Install
 
-## Evaluation Metrics
+```bash
+pip install -r requirements.txt
+```
 
-The benchmark evaluates models based on:
+Run the evaluator with the following command:
 
-1. **Overall Accuracy**: Percentage of correctly answered questions
-2. **Domain-specific Accuracy**: Performance breakdown by domain
-3. **Confidence Analysis**: Analysis of model confidence relative to correctness
+```bash
+python llm_evaluator.py --provider [openai|anthropic|ollama] --model [model_name] [options]
+```
+
+### Arguments
+
+- `--provider`: LLM provider (required, one of "openai", "anthropic", "ollama")
+- `--model`: Model name (required, e.g., "gpt-4o", "claude-3-opus", "llama3")
+- `--api-key`: API key for OpenAI or Anthropic (optional, can use environment variables)
+- `--ollama-host`: Ollama host address (default: "<http://localhost:11434>")
+- `--input-file`: Path to the Parquet file with test questions (default: "./data/test-000000-000001.parquet")
+- `--output-dir`: Directory to save results (default: "./results")
+
+### Environment Variables
+
+You can set the following environment variables instead of passing API keys as arguments:
+
+- `OPENAI_API_KEY` for OpenAI
+- `ANTHROPIC_API_KEY` for Anthropic
+
+## Example Commands
+
+### Evaluate with OpenAI GPT-4o
+
+```bash
+python llm_evaluator.py --provider openai --model gpt-4o
+```
+
+### Evaluate with Anthropic Claude
+
+```bash
+python llm_evaluator.py --provider anthropic --model claude-3-opus-20240229
+```
+
+### Evaluate with Ollama (local model)
+
+```bash
+python llm_evaluator.py --provider ollama --model llama3
+```
+
+## Input Data Format
+
+The input Parquet file should have the following columns:
+
+- Question Number: Unique identifier for each question
+- Question: The question text
+- Option A: First multiple-choice option
+- Option B: Second multiple-choice option
+- Option C: Third multiple-choice option
+- Option D: Fourth multiple-choice option
+- Correct Answer: The correct option (A, B, C, or D)
+- Domain: The knowledge domain of the question
+
+## Output Format
+
+The evaluator generates a JSON file with the following structure:
+
+```json
+{
+  "model": "model-name",
+  "provider": "provider-name",
+  "total_questions": 100,
+  "correct_answers": 75,
+  "overall_accuracy": 0.75,
+  "domain_metrics": {
+    "domain1": {
+      "accuracy": 0.8,
+      "correct": 20,
+      "total": 25
+    },
+    "domain2": {
+      "accuracy": 0.7,
+      "correct": 35,
+      "total": 50
+    }
+  },
+  "detailed_results": [
+    {
+      "question_number": 1,
+      "question": "Question text",
+      "options": {
+        "A": "Option A text",
+        "B": "Option B text",
+        "C": "Option C text",
+        "D": "Option D text"
+      },
+      "correct_answer": "A",
+      "model_answer": "A",
+      "raw_response": "The model's raw response",
+      "is_correct": true,
+      "domain": "domain1"
+    }
+  ]
+}
+```
+
+## Notes
+
+- The evaluator uses temperature=0 to get deterministic responses for evaluation
+- The prompt is designed to elicit only the letter of the selected option
+- The parser can handle various response formats from the models
 
 ## Citation
 
@@ -60,7 +160,7 @@ If you use AICB in your research, please cite:
   year = {2025},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/treeleaves30760/AICB-Analog-Integrated-Circuit-Benchmark}}
+  howpublished = {\url{<https://github.com/treeleaves30760/AICB-Analog-Integrated-Circuit-Benchmark>}}
 }
 ```
 
