@@ -4,8 +4,8 @@ numpy>=1.20.0
 matplotlib>=3.4.0
 seaborn>=0.11.0
 tqdm>=4.60.0
-# Uncomment based on which API you want to use
-# openai>=1.0.0
-# anthropic>=0.5.0
-# transformers>=4.26.0
-# torch>=1.13.0
+openai
+torch
+anthropic
+transformers
+ollama
